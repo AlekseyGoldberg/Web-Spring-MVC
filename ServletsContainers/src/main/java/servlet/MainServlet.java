@@ -17,7 +17,7 @@ public class MainServlet extends HttpServlet {
 //        final var repository = new PostRepository();
 //        final var service = new PostService(repository);
 //        controller = new PostController(service);
-        final var context = new AnnotationConfigApplicationContext("");
+        final var context = new AnnotationConfigApplicationContext("org.example");
     }
 
     @Override
