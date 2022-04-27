@@ -5,13 +5,16 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.ServerSocket;
+import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
+import java.util.Map;
 
 public class ConnectionClient implements Runnable {
     BufferedReader in;
     BufferedOutputStream out;
+    Request request;
 
     private final List<String> validPaths = List.of("/index.html", "/spring.svg", "/spring.png", "/resources.html",
             "/styles.css", "/app.js", "/links.html", "/forms.html", "/classic.html", "/events.html", "/events.js");
@@ -21,10 +24,13 @@ public class ConnectionClient implements Runnable {
             var socket = serverSocket.accept();
             in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             out = new BufferedOutputStream(socket.getOutputStream());
+            this.request = new Request(in);
         } catch (IOException e) {
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
     }
-
+//http://localhost:9999/my/?name=aleksey&age=19&name=ji
     @Override
     public void run() {
         try {
@@ -59,8 +65,12 @@ public class ConnectionClient implements Runnable {
                     .getBytes());
             Files.copy(filePath, out);
             out.flush();
-        } catch (IOException e) {
-            e.printStackTrace();
+            Map<String,String> params=request.getQueryParams();
+            for (Map.Entry<String,String> i:params.entrySet()){
+                System.out.println(i.getKey()+" "+i.getValue());
+            }
+        } catch (IOException | URISyntaxException exception) {
+            exception.printStackTrace();
         }
     }
 }
