@@ -1,6 +1,7 @@
 package controller;
 
 import com.google.gson.Gson;
+import exception.NotFoundException;
 import model.Post;
 import service.PostService;
 
@@ -25,31 +26,38 @@ public class PostController {
 
     public void getById(long id, HttpServletResponse response) throws IOException {
         response.setContentType(APPLICATION_JSON);
-        final var post = service.getById(id);
-        final var gson = new Gson();
-        if (post != null)
+        try {
+            final var post = service.getById(id);
+            final var gson = new Gson();
             response.getWriter().print(gson.toJson(post));
-        else
-            response.getWriter().print("HTTP/1.1 404 Not found id");
+        } catch (NotFoundException exception) {
+            badRequest(response, exception);
+        }
     }
 
     public void save(Reader body, HttpServletResponse response) throws IOException {
         response.setContentType(APPLICATION_JSON);
-        final var gson = new Gson();
-        final var post = gson.fromJson(body, Post.class);
-        final var data = service.save(post);
-        if (data != null)
+        try {
+            final var gson = new Gson();
+            final var post = gson.fromJson(body, Post.class);
+            final var data = service.save(post);
             response.getWriter().print(gson.toJson(data));
-        else
-            response.getWriter().print("HTTP/1.1 404 Post Not found");
+        } catch (NotFoundException exception) {
+            badRequest(response, exception);
+        }
     }
 
     public void removeById(long id, HttpServletResponse response) throws IOException {
         response.setContentType(APPLICATION_JSON);
-        var deletePost = service.removeById(id);
-        if (deletePost != null)
+        try {
+            var deletePost = service.removeById(id);
             response.getWriter().print("HTTP/1.1 200 ok");
-        else
-            response.getWriter().print("HTTP/1.1 404 Post Not found");
+        } catch (NotFoundException exception) {
+            badRequest(response, exception);
+        }
+    }
+
+    private void badRequest(HttpServletResponse response, NotFoundException exception) throws IOException {
+        response.getWriter().print("HTTP/1.1 404 " + exception.getMessage());
     }
 }
