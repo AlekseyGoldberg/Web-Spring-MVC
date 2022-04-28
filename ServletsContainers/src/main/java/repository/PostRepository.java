@@ -2,17 +2,14 @@ package repository;
 
 import model.Post;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 public class PostRepository {
     List<Post> listOfPost;
 
     public PostRepository(){
-        listOfPost=new CopyOnWriteArrayList<>();
+        listOfPost=new LinkedList<>();
     }
     public List<Post> all() {
         return listOfPost;
@@ -28,9 +25,8 @@ public class PostRepository {
 
     public Post save(Post post) {
         if (post.getId()==0){
-            post.setId(listOfPost.size());
+            post.setId(listOfPost.size()+1);
             listOfPost.add(post);
-            System.out.println(post);
             return post;
         }else {
             long foundId=post.getId();
