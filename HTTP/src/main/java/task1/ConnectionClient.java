@@ -29,8 +29,6 @@ public class ConnectionClient implements Runnable {
             e.printStackTrace();
         }
     }
-
-    //http://localhost:9999/my/?name=aleksey&age=19&name=ji
     @Override
     public void run() {
         List<NameValuePair> params = null;
@@ -40,7 +38,7 @@ public class ConnectionClient implements Runnable {
             e.printStackTrace();
         }
         for (NameValuePair param : params)
-            System.out.println("name: " + param.getName() + " value: " + param.getValue());
+            System.out.println(param.getName() + param.getValue());
 
         System.out.println("-----------------");
         List<NameValuePair> listOfParam = request.getQueryParam("name");

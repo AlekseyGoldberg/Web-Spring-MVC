@@ -25,20 +25,22 @@ public class Request {
     private final List<String> validPaths;
     private final BufferedOutputStream out;
     private List<NameValuePair> params;
-
-    public Request(BufferedReader in, BufferedOutputStream out,List<String > validPaths) throws IOException, InterruptedException, URISyntaxException {
+    public Request(BufferedReader in, BufferedOutputStream out, List<String> validPaths) throws IOException, InterruptedException, URISyntaxException {
         this.requestLine = in.readLine();
-        this.out=out;
-        this.validPaths=validPaths;
+        this.out = out;
+        this.validPaths = validPaths;
+//        раскомментировать при проверке дз "Формы и форматы данных"
+//        Запрос: http://localhost:9999/my/?name=aleksey&age=19&name=ji
+//        params=new ArrayList<>();
+//        params = URLEncodedUtils.parse(new URI(requestLine), "UTF-8");
 
-        params=new ArrayList<>();
-        params = URLEncodedUtils.parse(new URI(requestLine), "UTF-8");
+//        Раскомментировать при проверке дз "HTTP и современный WEB"
+//        Запрос: GET /spring.svg HTTP/1.1
 //        startLine();
 //        headers();
 //        bodyRequest();
     }
-
-    public void getResponse(){
+    public void getResponse() {
         try {
 
             final var parts = requestLine.split(" ");
@@ -69,15 +71,17 @@ public class Request {
                     .getBytes());
             Files.copy(filePath, out);
             out.flush();
-        }catch (IOException e){}
+        } catch (IOException e) {
+        }
     }
 
     public List<NameValuePair> getQueryParams() throws URISyntaxException {
         return params;
     }
-    public List<NameValuePair> getQueryParam(String name){
-        List<NameValuePair> listOfParam=new ArrayList<>();
-        for (NameValuePair param:params){
+
+    public List<NameValuePair> getQueryParam(String name) {
+        List<NameValuePair> listOfParam = new ArrayList<>();
+        for (NameValuePair param : params) {
             if (param.getName().equals(name))
                 listOfParam.add(param);
         }
@@ -85,36 +89,47 @@ public class Request {
     }
 
     private void startLine() {
-        String[] requestLineInChar = requestLine.split("");
+        String[] requestLineInChar = requestLine.split(" ");
         StringBuilder startLine = new StringBuilder();
         int index = 0;
-        while (!requestLineInChar[index].equals("\n")) {
+        while (index != 3) {
             startLine.append(requestLineInChar[index]);
+            startLine.append(" ");
             index++;
         }
+        System.out.println("startLine: " + startLine);
         this.startLine = startLine.toString();
     }
 
     private void headers() {
         String[] requestLineInMass = requestLine.split("\n");
         StringBuilder headersBuilder = new StringBuilder();
-        int index = 1;
-        while (!requestLineInMass[index].isEmpty()) {
-            headersBuilder.append(requestLineInMass[index]);
-            index++;
+        if (requestLineInMass.length == 1) {
+            this.headers = "";
+        } else {
+            int index = 1;
+            while (!requestLineInMass[index].isEmpty()) {
+                headersBuilder.append(requestLineInMass[index]);
+                index++;
+            }
+            this.headers = headersBuilder.toString();
+            this.indexEmptyLine = index;
         }
-        this.headers = headersBuilder.toString();
-        this.indexEmptyLine = index;
+        System.out.println("headers: " + headers);
     }
 
     private void bodyRequest() {
         StringBuilder bodyBuilder = new StringBuilder();
         String[] requestLineInMass = requestLine.split("\n");
-
-        for (int i = indexEmptyLine++; i < requestLineInMass.length; i++) {
-            bodyBuilder.append(requestLineInMass[i]);
+        if (requestLineInMass.length == 1) {
+            this.bodyRequest = "";
+        } else {
+            for (int i = indexEmptyLine++; i < requestLineInMass.length; i++) {
+                bodyBuilder.append(requestLineInMass[i]);
+            }
+            this.bodyRequest = bodyBuilder.toString();
         }
-        this.bodyRequest = bodyBuilder.toString();
+        System.out.println("body: " + bodyRequest);
     }
 
     public String getStartLine() {
