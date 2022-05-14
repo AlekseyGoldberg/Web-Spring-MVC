@@ -1,16 +1,15 @@
-package repository;
+package org.example.repository;
 
-import exception.NotFoundException;
-import model.Post;
+import org.example.exception.NotFoundException;
+import org.example.model.Post;
 
-import java.io.IOException;
 import java.util.*;
-import java.util.concurrent.ConcurrentSkipListMap;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class PostRepository {
-    ConcurrentSkipListMap<Long,Post> listOfPost;
+    ConcurrentHashMap<Long,Post> listOfPost;
     public PostRepository(){
-        listOfPost= new ConcurrentSkipListMap<>();
+        listOfPost= new ConcurrentHashMap<>();
     }
     public List<Post> all() {
         return listOfPost.values().stream().toList();

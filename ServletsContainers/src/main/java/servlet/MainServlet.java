@@ -1,8 +1,8 @@
 package servlet;
 
-import controller.PostController;
-import repository.PostRepository;
-import service.PostService;
+import org.example.controller.PostController;
+import org.example.repository.PostRepository;
+import org.example.service.PostService;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
