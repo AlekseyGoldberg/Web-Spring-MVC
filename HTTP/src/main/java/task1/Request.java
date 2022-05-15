@@ -31,8 +31,8 @@ public class Request {
         this.validPaths = validPaths;
 //        раскомментировать при проверке дз "Формы и форматы данных"
 //        Запрос: http://localhost:9999/my/?name=aleksey&age=19&name=ji
-//        params=new ArrayList<>();
-//        params = URLEncodedUtils.parse(new URI(requestLine), "UTF-8");
+        params=new ArrayList<>();
+        params = URLEncodedUtils.parse(new URI(requestLine), "UTF-8");
 
 //        Раскомментировать при проверке дз "HTTP и современный WEB"
 //        Запрос: GET /spring.svg HTTP/1.1

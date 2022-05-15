@@ -38,12 +38,12 @@ public class ConnectionClient implements Runnable {
             e.printStackTrace();
         }
         for (NameValuePair param : params)
-            System.out.println(param.getName() + param.getValue());
+            System.out.println(param.getName()+" " + param.getValue());
 
         System.out.println("-----------------");
         List<NameValuePair> listOfParam = request.getQueryParam("name");
         System.out.println("List of params name:");
         for (NameValuePair param : listOfParam)
-            System.out.println("name: " + param.getName() + " value: " + param.getValue());
+            System.out.println("nameParam: " + param.getName() + " valueParam: " + param.getValue());
     }
 }
