@@ -4,19 +4,21 @@ import org.example.exeption.NotFoundException;
 import org.example.model.Post;
 import org.springframework.stereotype.Repository;
 
+import java.lang.ref.Reference;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicLong;
 
 @Repository
 public class PostRepositoryStubImpl implements PostRepository {
     ConcurrentHashMap<Long, Post> listOfPost;
-    long newId;
+    AtomicLong newId;
 
     public PostRepositoryStubImpl() {
         listOfPost = new ConcurrentHashMap<>();
-        newId = 0;
+        newId = new AtomicLong(1);
     }
 
     public List<Post> all() {
@@ -33,15 +35,14 @@ public class PostRepositoryStubImpl implements PostRepository {
 
     public Post save(Post post) {
         if (post.getId() == 0) {
-            post.setId(newId);
-            listOfPost.put(newId, post);
-            newId++;
+            post.setId(newId.get());
+            listOfPost.put(newId.get(), post);
+            newId.addAndGet(1);
         } else {
-            try {
+            if (listOfPost.containsKey(post.getId()))
                 listOfPost.get(post.getId()).setContent(post.getContent());
-            } catch (NullPointerException e) {
+            else
                 throw new NotFoundException("Not found id");
-            }
         }
         return post;
     }

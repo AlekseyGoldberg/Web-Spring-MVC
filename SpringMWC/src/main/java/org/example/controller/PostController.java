@@ -42,7 +42,7 @@ public class PostController {
     }
 
     @ExceptionHandler(NotFoundException.class)
-    public ResponseEntity<Object> handleEntityNotFoundEx(NotFoundException ex, WebRequest request) {
+    public ResponseEntity<Object> handleEntityNotFoundEx(NotFoundException ex) {
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
     }
 }
