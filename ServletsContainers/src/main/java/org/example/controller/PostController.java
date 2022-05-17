@@ -26,38 +26,22 @@ public class PostController {
 
     public void getById(long id, HttpServletResponse response) throws IOException {
         response.setContentType(APPLICATION_JSON);
-        try {
-            final var post = service.getById(id);
-            final var gson = new Gson();
-            response.getWriter().print(gson.toJson(post));
-        } catch (NotFoundException exception) {
-            badRequest(response, exception);
-        }
+        final var post = service.getById(id);
+        final var gson = new Gson();
+        response.getWriter().print(gson.toJson(post));
     }
 
     public void save(Reader body, HttpServletResponse response) throws IOException {
         response.setContentType(APPLICATION_JSON);
-        try {
-            final var gson = new Gson();
-            final var post = gson.fromJson(body, Post.class);
-            final var data = service.save(post);
-            response.getWriter().print(gson.toJson(data));
-        } catch (NotFoundException exception) {
-            badRequest(response, exception);
-        }
+        final var gson = new Gson();
+        final var post = gson.fromJson(body, Post.class);
+        final var data = service.save(post);
+        response.getWriter().print(gson.toJson(data));
     }
 
     public void removeById(long id, HttpServletResponse response) throws IOException {
         response.setContentType(APPLICATION_JSON);
-        try {
-            var deletePost = service.removeById(id);
-            response.getWriter().print("HTTP/1.1 200 ok");
-        } catch (NotFoundException exception) {
-            badRequest(response, exception);
-        }
-    }
-
-    private void badRequest(HttpServletResponse response, NotFoundException exception) throws IOException {
-        response.getWriter().print("HTTP/1.1 404 " + exception.getMessage());
+        var deletePost = service.removeById(id);
+        response.setStatus(200);
     }
 }

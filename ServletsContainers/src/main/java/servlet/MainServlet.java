@@ -1,12 +1,14 @@
 package servlet;
 
 import org.example.controller.PostController;
+import org.example.exception.NotFoundException;
 import org.example.repository.PostRepository;
 import org.example.service.PostService;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 
 public class MainServlet extends HttpServlet {
     private PostController controller;
@@ -19,7 +21,7 @@ public class MainServlet extends HttpServlet {
     }
 
     @Override
-    protected void service(HttpServletRequest req, HttpServletResponse resp) {
+    protected void service(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         try {
             final var path = req.getRequestURI();
             final var method = req.getMethod();
@@ -44,9 +46,16 @@ public class MainServlet extends HttpServlet {
                 return;
             }
             resp.setStatus(HttpServletResponse.SC_NOT_FOUND);
+        } catch (NotFoundException exception) {
+            badRequest(resp, exception);
         } catch (Exception e) {
             e.printStackTrace();
             resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }
+    }
+
+    private void badRequest(HttpServletResponse response, NotFoundException exception) throws IOException {
+        response.setStatus(404);
+//        response.getWriter().print("HTTP/1.1 404 " + exception.getMessage());
     }
 }
