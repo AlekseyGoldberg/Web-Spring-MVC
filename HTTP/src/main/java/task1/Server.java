@@ -9,9 +9,9 @@ public class Server {
     public static void start() {
         ExecutorService threadPool = Executors.newFixedThreadPool(64);
 
-        try (ServerSocket serverSocket = new ServerSocket(9999)) {
+        try (ServerSocket serverSocket = new ServerSocket(9998)) {
             while (true) {
-                ConnectionClient client=new ConnectionClient(serverSocket);
+                ConnectionClient client = new ConnectionClient(serverSocket);
                 threadPool.submit(client);
             }
         } catch (IOException e) {
