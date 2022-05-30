@@ -1,5 +1,7 @@
 package task1;
 
+import org.apache.http.NameValuePair;
+
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -15,9 +17,6 @@ public class ConnectionClient implements Runnable {
     Request request;
     Socket socket;
 
-    private final List<String> validPaths = List.of("/index.html", "/spring.svg", "/spring.png", "/resources.html",
-            "/styles.css", "/app.js", "/links.html", "/forms.html", "/classic.html", "/events.html", "/events.js");
-
     public ConnectionClient(ServerSocket serverSocket) {
         try {
             socket = serverSocket.accept();
@@ -30,7 +29,7 @@ public class ConnectionClient implements Runnable {
     @Override
     public void run() {
         try {
-            this.request = new Request(in, out, validPaths);
+            this.request = new Request(in, out);
 //            Раскомментировать при проверке дз "HTTP и современный WEB" и закоментировать код ниже
 //            Запрос: GET /spring.svg HTTP/1.1
 //            request.getResponse();
