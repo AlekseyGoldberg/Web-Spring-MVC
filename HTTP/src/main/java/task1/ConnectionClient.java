@@ -32,7 +32,7 @@ public class ConnectionClient implements Runnable {
             this.request = new Request(in, out);
 //            Раскомментировать при проверке дз "HTTP и современный WEB" и закоментировать код ниже
 //            Запрос: GET /spring.svg HTTP/1.1
-//            request.getResponse();
+            request.getResponse();
 
 //            Раскомментировать при проверке дз "Формы и форматы данных" и закоментировать код выше
 //            И в классе Request нужно раскомментировать нужный код в конструкторе

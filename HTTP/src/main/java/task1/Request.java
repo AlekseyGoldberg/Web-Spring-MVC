@@ -44,7 +44,8 @@ public class Request {
         }
 
     public void send200Response(String path) throws IOException {
-        Path filePath=Path.of("../Web,Spring & SpringMWC/HTTP/src/public"+path);
+        final var filePath = Path.of(".", "HTTP/public", path);
+//        Path filePath=Path.of("../Web,Spring & SpringMWC/HTTP/src/public"+path);
         final var template = Files.readString(filePath).getBytes();
         final var mimeType = Files.probeContentType(filePath);
 
